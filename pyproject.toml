@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "personaledge"
+version = "0.1.0"
+description = "特定のページから情報を取得し、個人の興味に合わせた具体例でその情報を説明してくれるツール"
+authors = ["rakuichi4817 <rakuichi4817@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pydantic = "^2.10.6"
+pydantic-settings = "^2.8.0"
+prompty = {extras = ["azure"], version = "^0.1.48"}
+openai = "^1.63.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.9.7"
+mypy = "^1.15.0"
+pytest = "^8.3.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "W", "I", "UP"]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+strict_optional = true
+python_version = "3.12"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "openai.*"
+follow_imports = "skip"
