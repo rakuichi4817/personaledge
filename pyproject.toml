@@ -12,6 +12,7 @@ pydantic = "^2.10.6"
 pydantic-settings = "^2.8.0"
 prompty = {extras = ["azure"], version = "^0.1.48"}
 openai = "^1.63.2"
+beautifulsoup4 = "^4.13.3"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -40,3 +41,9 @@ ignore_missing_imports = true
 [[tool.mypy.overrides]]
 module = "openai.*"
 follow_imports = "skip"
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+xfail_strict = true
+asyncio_mode = "auto"
