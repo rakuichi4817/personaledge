@@ -9,13 +9,13 @@ class SitemapDomainService:
 
     @staticmethod
     def parse(xml_content: str) -> list[SitemapUrl]:
-        """xml_content をパースして Sitemap オブジェクトに変換
+        """xml_content をパースしてSitemapオブジェクトに変換
 
         Args:
-            xml_content (str): サイトマップの XML コンテンツ
+            xml_content (str): サイトマップのXML文字列
 
         Returns:
-            Sitemap: サイトマップ情報
+            list[SitemapUrl]: サイトマップのURLリスト
         """
         root = ET.fromstring(xml_content)
         urls = []
