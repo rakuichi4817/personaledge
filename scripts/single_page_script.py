@@ -4,6 +4,8 @@ import sys
 
 import requests
 
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 from personaledge.applications import get_app_service
 from personaledge.logger import get_logger
 
