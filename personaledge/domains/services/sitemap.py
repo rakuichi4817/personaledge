@@ -1,5 +1,5 @@
-from datetime import datetime
-from xml.etree import ElementTree as ET
+from pydantic import AnyHttpUrl
+from usp.tree import sitemap_from_str
 
 from ..models.sitemap import SitemapUrl
 
@@ -17,31 +17,21 @@ class SitemapDomainService:
         Returns:
             list[SitemapUrl]: サイトマップのURLリスト
         """
-        root = ET.fromstring(xml_content)
+        tree = sitemap_from_str(xml_content)
+
         urls = []
-        for url in root.findall(".//url"):
-            loc = url.get("loc")
-
-            temp_last_modified = url.get("lastmod")
-            if temp_last_modified:
-                last_modified = datetime.fromisoformat(temp_last_modified)
+        for page in tree.all_pages():
+            if page.change_frequency:
+                change_frequency = page.change_frequency.value
             else:
-                last_modified = None
-
-            change_frequency = url.get("changefreq")
-
-            temp_priority = url.get("priority")
-            if temp_priority:
-                priority = float(temp_priority)
-            else:
-                priority = None
+                change_frequency = None
 
             urls.append(
                 SitemapUrl(
-                    loc=loc,
-                    last_modified=last_modified,
+                    loc=AnyHttpUrl(page.url),
+                    last_modified=page.last_modified,
                     change_frequency=change_frequency,
-                    priority=priority,
+                    priority=page.priority,
                 )
             )
         return urls

@@ -13,12 +13,15 @@ pydantic-settings = "^2.8.0"
 prompty = {extras = ["azure"], version = "^0.1.48"}
 openai = "^1.63.2"
 beautifulsoup4 = "^4.13.3"
+requests = "^2.32.3"
+ultimate-sitemap-parser = "^1.2.0"
 
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.9.7"
 mypy = "^1.15.0"
 pytest = "^8.3.4"
+types-requests = "^2.32.0.20241016"
 
 [build-system]
 requires = ["poetry-core"]
