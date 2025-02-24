@@ -1,3 +1,5 @@
+import time
+from collections.abc import Generator
 from datetime import datetime, timedelta
 
 import requests
@@ -76,7 +78,8 @@ class AppService:
         interest: str,
         timedelta: timedelta = timedelta(days=1),
         url_prefix: str | None = None,
-    ) -> list[PersonalizedWebPageContent]:
+        sleep_time: int = 1,
+    ) -> Generator[PersonalizedWebPageContent, None, None]:
         """サイトマップから最新のページを取得して個人最適化
 
         Args:
@@ -87,7 +90,7 @@ class AppService:
             url_prefix (str | None): URLのプレフィックス default: None
 
         Returns:
-            list[PersonalizedWebPageContent]: 個人最適化されたWebページのコンテンツ情報リスト
+            Generator[PersonalizedWebPageContent, None, None]: 個人最適化されたWebページのコンテンツ情報
         """
         logger.info(f"サイトマップの取得: {url}")
         response = requests.get(url)
@@ -109,13 +112,13 @@ class AppService:
         logger.info(f"対象のページ一覧: {filtered_sitemap_pages}")
 
         logger.info(f"「{interest}」で個人最適化を行います")
-        personalized_web_pages = []
+
         for page in filtered_sitemap_pages:
             personalized_web_page = self.fetch_and_personalize_web_page(
                 url=page.loc, prompty_filepath=prompty_filepath, interest=interest
             )
-            personalized_web_pages.append(personalized_web_page)
-        return personalized_web_pages
+            time.sleep(sleep_time)
+            yield personalized_web_page
 
 
 def get_app_service() -> AppService:

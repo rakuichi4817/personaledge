@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytz
 from bs4 import BeautifulSoup
 from pydantic import AnyHttpUrl
 from usp.tree import sitemap_from_str
@@ -8,11 +9,25 @@ from ...logger import get_logger
 from ..models.page import WebPageContent
 from ..models.sitemap import SitemapPage
 
+DISPLAY_TIMEZONE = "Asia/Tokyo"
+tz = pytz.timezone(DISPLAY_TIMEZONE)
 logger = get_logger(__name__)
 
 
 class WebPageDomainService:
     """Webページを扱うドメインサービス"""
+
+    @staticmethod
+    def localized_datetime(date: datetime) -> datetime:
+        """指定された日時を指定されたタイムゾーンに変換
+
+        Args:
+            date (datetime): 変換対象の日時
+
+        Returns:
+            _type_: _description_
+        """
+        return datetime.fromtimestamp(date.timestamp(), tz=tz)
 
     @staticmethod
     def parse_sitemap(xml_content: str) -> list[SitemapPage]:
@@ -33,10 +48,17 @@ class WebPageDomainService:
             else:
                 change_frequency = None
 
+            if page.last_modified:
+                last_modified = WebPageDomainService.localized_datetime(
+                    page.last_modified
+                )
+            else:
+                last_modified = None
+
             urls.append(
                 SitemapPage(
                     loc=AnyHttpUrl(page.url),
-                    last_modified=page.last_modified,
+                    last_modified=last_modified,
                     change_frequency=change_frequency,
                     priority=page.priority,
                 )
@@ -68,7 +90,7 @@ class WebPageDomainService:
 
     @staticmethod
     def filter_pages(
-        pages: list[SitemapPage],
+        sitemap_pages: list[SitemapPage],
         url_prefix: str | None = None,
         from_datetime: datetime | None = None,
         to_datetime: datetime = datetime.now(),
@@ -91,7 +113,7 @@ class WebPageDomainService:
             list[SitemapUrl]: 更新されたページのURLリスト
         """
         urls = []
-        for page in pages:
+        for page in sitemap_pages:
             if url_prefix and not str(page.loc).startswith(url_prefix):
                 logger.info(f"URLのプレフィックスが一致しません: {page.loc}")
                 continue
@@ -101,10 +123,16 @@ class WebPageDomainService:
                     logger.info(f"最終更新日時が取得できません: {page.loc}")
                     continue
 
-                if from_datetime and page.last_modified < from_datetime:
+                if (
+                    from_datetime
+                    and page.last_modified
+                    < WebPageDomainService.localized_datetime(from_datetime)
+                ):
                     logger.info(f"指定時刻以降のページではありません: {page.loc}")
                     continue
-                if page.last_modified > to_datetime:
+                if page.last_modified > WebPageDomainService.localized_datetime(
+                    to_datetime
+                ):
                     logger.info(f"指定時刻以前のページではありません: {page.loc}")
                     continue
 

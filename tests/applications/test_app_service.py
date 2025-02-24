@@ -105,4 +105,4 @@ class TestAppService:
         )
 
         # THEN: 個人最適化されたページが正しく取得できている
-        assert len(result) == 2
+        assert len([page for page in result]) == 2

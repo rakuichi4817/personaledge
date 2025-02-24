@@ -16,6 +16,7 @@ beautifulsoup4 = "^4.13.3"
 requests = "^2.32.3"
 ultimate-sitemap-parser = "^1.2.0"
 python-json-logger = "^3.2.1"
+pytz = "^2025.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -24,6 +25,7 @@ mypy = "^1.15.0"
 pytest = "^8.3.4"
 types-requests = "^2.32.0.20241016"
 pytest-mock = "^3.14.0"
+types-pytz = "^2025.1.0.20250204"
 
 [build-system]
 requires = ["poetry-core"]
