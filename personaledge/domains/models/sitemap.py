@@ -1,7 +1,9 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import AnyHttpUrl, BaseModel, Field
+from pydantic import AnyHttpUrl, BaseModel, Field, field_validator
+
+from ...config import tz
 
 
 class SitemapPage(BaseModel):
@@ -16,3 +18,9 @@ class SitemapPage(BaseModel):
         | None
     ) = Field(None)
     priority: float | None = Field(None, ge=0, le=1)
+
+    @field_validator("last_modified")
+    def validate_last_modified(cls, value, values):
+        # ローカルタイムゾーンに変換
+        if value is not None:
+            return datetime.fromtimestamp(value.timestamp(), tz=tz)

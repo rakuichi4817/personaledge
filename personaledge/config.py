@@ -1,6 +1,10 @@
 import os
 
+import pytz
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+DISPLAY_TIMEZONE = "Asia/Tokyo"
+tz = pytz.timezone(DISPLAY_TIMEZONE)
 
 
 class Settings(BaseSettings):

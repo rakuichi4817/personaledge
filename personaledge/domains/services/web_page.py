@@ -1,16 +1,14 @@
 from datetime import datetime
 
-import pytz
 from bs4 import BeautifulSoup
 from pydantic import AnyHttpUrl
 from usp.tree import sitemap_from_str
 
+from ...config import tz
 from ...logger import get_logger
 from ..models.page import WebPageContent
 from ..models.sitemap import SitemapPage
 
-DISPLAY_TIMEZONE = "Asia/Tokyo"
-tz = pytz.timezone(DISPLAY_TIMEZONE)
 logger = get_logger(__name__)
 
 
