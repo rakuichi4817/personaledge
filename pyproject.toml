@@ -5,16 +5,17 @@ description = "特定のページから情報を取得し、個人の興味に�
 authors = ["rakuichi4817 <rakuichi4817@gmail.com>"]
 license = "MIT"
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
 pydantic = "^2.10.6"
-pydantic-settings = "^2.8.0"
 prompty = {extras = ["azure"], version = "^0.1.48"}
-openai = "^1.63.2"
+pydantic-settings = "^2.8.0"
 beautifulsoup4 = "^4.13.3"
 requests = "^2.32.3"
 ultimate-sitemap-parser = "^1.2.0"
+python-json-logger = "^3.2.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,6 +23,7 @@ ruff = "^0.9.7"
 mypy = "^1.15.0"
 pytest = "^8.3.4"
 types-requests = "^2.32.0.20241016"
+pytest-mock = "^3.14.0"
 
 [build-system]
 requires = ["poetry-core"]

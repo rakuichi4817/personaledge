@@ -1,3 +1,4 @@
-from .sitemap import SitemapDomainService
+from .personalize import PersonalizeDomainService
+from .web_page import WebPageDomainService
 
-__all__ = ["SitemapDomainService"]
+__all__ = ["WebPageDomainService", "PersonalizeDomainService"]
