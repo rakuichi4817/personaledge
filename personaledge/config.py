@@ -14,10 +14,10 @@ class Settings(BaseSettings):
         env_file=os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
     )
 
-    aoai_endpoint: str
-    aoai_api_version: str
-    aoai_api_key: str
-    deployment_name: str
+    aoai_endpoint: str = ""
+    aoai_api_version: str = ""
+    aoai_api_key: str = ""
+    deployment_name: str = ""
 
 
 def get_settings() -> Settings:
