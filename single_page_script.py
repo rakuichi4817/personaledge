@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 import requests
@@ -26,12 +27,12 @@ def send_slack_notification(webhook_url: str, message: str):
         print(f"通知の送信に失敗しました: {response.status_code}, {response.text}")
 
 
-def target_page_to_slack():
+def target_page_personalize():
     # 引数の取得
     args = sys.argv[1:]
 
     # 引数の数が足りない場合はエラー
-    if len(args) < 4:
+    if len(args) < 3:
         logger.error("引数が足りません")
         logger.error(
             "Usage: personaledge <URL> <PROMPTY_FILE> <INTEREST> <WEBHOOK_URL>"
@@ -40,9 +41,9 @@ def target_page_to_slack():
 
     # 引数の取得
     url = args[0]
-    prompty_filepath = args[1]
+    # 現在のディレクトリにあるファイルを指定する
+    prompty_filepath = os.path.join(os.getcwd(), args[1])
     interest = args[2]
-    webhook_url = args[3]
 
     # アプリケーションサービスの取得
     app_service = get_app_service()
@@ -61,9 +62,12 @@ def target_page_to_slack():
     )
 
     # Slackに通知
-    message = f"{personalized_web_page_content.personalized_content}\n\n■URL: <{personalized_web_page_content.url}>\n■Title: {personalized_web_page_content.title}"
-    send_slack_notification(webhook_url, message)
+    if len(args) == 4:
+        logger.info("Slackに通知します")
+        webhook_url = args[3]
+        message = f"{personalized_web_page_content.personalized_content}\n\n■URL: <{personalized_web_page_content.url}>\n■Title: {personalized_web_page_content.title}"
+        send_slack_notification(webhook_url, message)
 
 
 if __name__ == "__main__":
-    target_page_to_slack()
+    target_page_personalize()
